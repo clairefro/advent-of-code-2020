@@ -1,7 +1,8 @@
 // DAY 01
-// 1. find the two entries that sum to 2020 and then then find their product.
-// 2. find the three entries that sum to 2020 and then find their product.
+// Part 1: find the two entries that sum to 2020 and then then find their product.
+// Part 2: find the three entries that sum to 2020 and then find their product.
 
+// Load data -----------------------
 const fs = require("fs");
 
 const raw = fs.readFileSync("./inputs/day01.txt", "utf8", function (err, data) {
@@ -12,6 +13,7 @@ const raw = fs.readFileSync("./inputs/day01.txt", "utf8", function (err, data) {
 let nums = raw.split(/\n/);
 nums.shift();
 nums = nums.map((n) => parseInt(n));
+// ---------------------------------
 
 console.log("## PART 1 ##");
 for (let i = 0; i < nums.length; i++) {
