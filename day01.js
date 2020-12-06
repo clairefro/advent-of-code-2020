@@ -11,7 +11,6 @@ const raw = fs.readFileSync("./inputs/day01.txt", "utf8", function (err, data) {
 });
 
 let nums = raw.split(/\n/);
-// nums.shift();
 nums = nums.map((n) => parseInt(n));
 // ---------------------------------
 
