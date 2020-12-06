@@ -37,20 +37,16 @@ const isValid1 = (row) => {
 };
 
 const valids1 = rows.filter((row) => isValid1(row)).length;
-const percentValid = ((valids1 / rows.length) * 100.0).toFixed(2);
-console.log(`Valid passwords: ${valids1}/${rows.length} (%${percentValid})`);
+console.log(`Valid passwords: ${valids1}/${rows.length}`);
 
 console.log("## PART 2 ##");
 const isValid2 = (row) => {
 	const parsed = parseRow(row);
 	if (!parsed) return false;
 	const { min: index1, max: index2, char, password } = parsed;
-	const char1 = password[index1 - 1];
-	const char2 = password[index2 - 1];
-	const pair = [char1, char2];
-	return pair.includes(char) && char1 !== char2;
+	const pair = [password[index1 - 1], password[index2 - 1]];
+	return pair.includes(char) && pair[0] !== pair[1];
 };
 
 const valids2 = rows.filter((row) => isValid2(row)).length;
-const percentValid2 = ((valids2 / rows.length) * 100.0).toFixed(2);
-console.log(`Valid passwords: ${valids2}/${rows.length} (%${percentValid2})`);
+console.log(`Valid passwords: ${valids2}/${rows.length} `);
