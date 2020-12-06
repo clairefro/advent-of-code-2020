@@ -1,0 +1,24 @@
+// DAY 01-1
+// find the two entries that sum to 2020 and then multiply those two numbers together.
+
+const fs = require("fs");
+
+const raw = fs.readFileSync("./inputs/day01-1.txt", "utf8", function (err, data) {
+	if (err) throw err;
+	return data.toString();
+});
+
+let nums = raw.split(/\n/);
+nums.shift();
+nums = nums.map((n) => parseInt(n));
+
+for (let i = 0; i < nums.length; i++) {
+	for (let k = i + 1; k < nums.length; k++) {
+		const sum = nums[i] + nums[k];
+
+		if (sum == 2020) {
+			console.log("Found: ", nums[i], nums[k]);
+			console.log("product: ", nums[i] * nums[k]);
+		}
+	}
+}
