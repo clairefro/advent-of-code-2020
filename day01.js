@@ -13,6 +13,8 @@ const raw = fs.readFileSync("./inputs/day01.txt", "utf8", function (err, data) {
 const nums = raw.split(/\n/).map((n) => parseInt(n));
 // ---------------------------------
 
+// Challenge to future-self: achieve with recursion?
+
 console.log("## PART 1 ##");
 for (let i = 0; i < nums.length; i++) {
 	for (let k = i + 1; k < nums.length; k++) {
