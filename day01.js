@@ -10,8 +10,7 @@ const raw = fs.readFileSync("./inputs/day01.txt", "utf8", function (err, data) {
 	return data.toString();
 });
 
-let nums = raw.split(/\n/);
-nums = nums.map((n) => parseInt(n));
+const nums = raw.split(/\n/).map((n) => parseInt(n));
 // ---------------------------------
 
 console.log("## PART 1 ##");
