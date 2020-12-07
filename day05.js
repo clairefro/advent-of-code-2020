@@ -64,16 +64,16 @@ const getSeatId = (binaryString) => {
 
 console.log("## PART 1 ##");
 // Find highest seatId
-const descSeatids = data.map((line) => getSeatId(line)).sort((a, b) => b - a);
-console.log("Highest Seat ID: ", descSeatids[0]);
+const seatIdsDesc = data.map((line) => getSeatId(line)).sort((a, b) => b - a);
+console.log("Highest Seat ID: ", seatIdsDesc[0]);
 
 console.log("## PART 2 ##");
 // Find missing seat
-const min = descSeatids[descSeatids.length - 1];
-const max = descSeatids[1];
+const min = seatIdsDesc[seatIdsDesc.length - 1];
+const max = seatIdsDesc[1];
 
 for (let i = min; i <= max; i++) {
-	if (!descSeatids.includes(i)) {
+	if (!seatIdsDesc.includes(i)) {
 		console.log("Your seat may be: ", i);
 	}
 }
