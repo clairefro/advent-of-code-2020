@@ -89,7 +89,6 @@ const validations = {
 };
 
 const validateFields = (mappedFields, validations) => {
-	// const results = Object.keys(mappedFields).map((f) => validations[f]());
 	const results = Object.entries(mappedFields).map(([field, value]) => {
 		if (validations[field]) {
 			return validations[field](value);
