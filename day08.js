@@ -12,49 +12,100 @@ const raw = fs.readFileSync("./inputs/day08.txt", "utf8", function (err, data) {
 const data = raw.split(/\n/);
 // ---------------------------------
 
-const parseInstructions = (data) => {
-	const parsed = data.map((d) => {
-		const parts = d.split(/\s/);
+const parseData = (data) => {
+	const parsed = data.map((item, i) => {
+		const parts = item.split(/\s/);
 		const action = parts[0];
-		const arg = parseInt(parts[1].replace("+", ""));
-		return {
-			action,
-			arg,
-			visited: false,
-		};
+		const arg = parseInt(parts[1]);
+		return { action, arg, visited: false };
 	});
-	return parsed; //=> { index: 0, action: 'acc', arg: 48, visited: false }
+	return parsed; //=>  [{ action: 'jmp', arg: -63, visited: false },..]
 };
 
-const instructions = parseInstructions(data);
+const instructions = parseData(data);
 
-const accumulate = (curPos = 0, sum = 0) => {
-	const { visited, action, arg } = instructions[curPos];
-	console.log({ curPos });
-	console.log({ action, arg });
-	if (visited) return sum; // bail on second visit
+const deepClone = (obj) => {
+	return JSON.parse(JSON.stringify(obj));
+};
 
-	instructions[curPos].visited = true; // mark as visited
-
-	const actions = {
-		acc: () => {
-			const nextSum = sum + arg;
-			const nextPos = (curPos += 1);
-			return accumulate(nextPos, nextSum);
-		},
-		jmp: () => {
-			nextPos = curPos + arg;
-			return accumulate(nextPos, sum);
-		},
-		nop: () => {
-			const nextPos = (curPos += 1);
-			return accumulate(nextPos, sum);
-		},
-	};
-
-	return actions[action]();
+// Where "end" means last entry before termination or re-starting loop
+const findEndState = (instructions) => {
+	const copy = deepClone(instructions);
+	let iterations = 0;
+	let pos = 0;
+	let sum = 0;
+	let isFinite = true;
+	while (true) {
+		const current = copy[pos];
+		if (!current) {
+			// instructions terminated
+			break;
+		} else if (current.visited) {
+			// instructions looped
+			isFinite = false;
+			break;
+		} else {
+			copy[pos].visited = true;
+			switch (current.action) {
+				case "acc":
+					sum += current.arg;
+					pos += 1;
+					break;
+				case "nop":
+					pos += 1;
+					break;
+				case "jmp":
+					pos += current.arg;
+					break;
+			}
+		}
+		iterations += 1;
+	}
+	return { iterations, pos, sum, isFinite };
 };
 
 console.log("## PART 1 ##");
-const accSum = accumulate();
-console.log("Accumulative sum at time of loop re-start: ", accSum);
+const part1EndState = findEndState(instructions);
+console.log("End state: ", part1EndState);
+
+console.log("## PART 2 ##");
+
+const flipAction = (action) => {
+	return action === "jmp" ? "nop" : "jmp";
+};
+
+const modInstructions = (instructions, pos) => {
+	const copy = deepClone(instructions);
+	const instruction = copy[pos];
+	if (instruction.action.match(/(jmp|nop)/)) {
+		copy[pos].action = flipAction(instruction.action);
+	}
+	return copy;
+};
+
+const fixCorruptLine = (instrs) => {
+	let pos = 0;
+	let result;
+	while (pos < instrs.length) {
+		const curInstruction = instrs[pos];
+		if (curInstruction === undefined) {
+			console.log("Reached end of instruction tweak attempts");
+			break;
+		} else if (curInstruction.action === "acc") {
+			pos += 1; // skip acc tests
+		} else {
+			const modifiedInstructions = modInstructions(instrs, pos);
+			result = findEndState(modifiedInstructions);
+			if (result.isFinite) {
+				console.log("Fix found!");
+				break;
+			} else {
+				pos += 1;
+			}
+		}
+	}
+	return result;
+};
+
+const part2EndState = fixCorruptLine(instructions);
+console.log("End state: ", part2EndState);
